@@ -55,7 +55,7 @@ class GraphBuilder:
 
     def ai_news_build_graph(self):
         # Initialize the AINewsNode
-        ai_news_node = AINewsNode(self.llm)
+        ai_news_node = AINewsNode(self.model)
 
         self.graph_builder.add_node("fetch_news", ai_news_node.fetch_news)
         self.graph_builder.add_node("summarize_news", ai_news_node.summarize_news)
@@ -73,6 +73,8 @@ class GraphBuilder:
         if usecase == "Basic Chatbot":
             self.basic_chatbot_build_graph()
         elif usecase == "Chatbot with Tool":
-            self.chatbot_with_tools_build_graph()            
+            self.chatbot_with_tools_build_graph() 
+        elif usecase == "AI News":
+            self.ai_news_build_graph()
         
         return self.graph_builder.compile()

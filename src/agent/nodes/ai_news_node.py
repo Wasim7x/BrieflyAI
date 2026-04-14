@@ -1,3 +1,4 @@
+import os
 from tavily import TavilyClient
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -72,12 +73,24 @@ Use format:
         self.state['summary'] = state['summary']
         return self.state
     
-    def save_result(self,state):
-        frequency = self.state['frequency']
-        summary = self.state['summary']
-        filename = f"./AINews/{frequency}_summary.md"
-        with open(filename, 'w') as f:
-            f.write(f"# {frequency.capitalize()} AI News Summary\n\n")
-            f.write(summary)
-        self.state['filename'] = filename
-        return self.state
+
+
+    def save_result(self, state):
+        try:
+            frequency = self.state.get('frequency', 'daily')
+            summary = self.state.get('summary', '')
+
+            output_dir = "./AINews"
+            os.makedirs(output_dir, exist_ok=True)
+            filename = os.path.join(output_dir, f"{frequency}_summary.md")
+
+            with open(filename, 'w', encoding='utf-8', errors='replace') as f:
+                f.write(f"# {frequency.capitalize()} AI News Summary\n\n")
+                f.write(summary)
+
+            self.state['filename'] = filename
+            return self.state
+
+        except Exception as e:
+            print(f"Error in save_result: {e}")
+            return self.state

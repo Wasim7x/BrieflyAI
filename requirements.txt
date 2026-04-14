@@ -5,6 +5,8 @@ langchain_groq
 langchain_openai
 streamlit
 faiss-cpu
+langchain-community
+langchain-tavily
 
 
 

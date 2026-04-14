@@ -3,7 +3,8 @@ from langgraph.graph import StateGraph,START, END, MessagesState
 from langgraph.prebuilt import tools_condition, ToolNode
 from langchain_core.prompts import ChatPromptTemplate
 from src.agent.nodes.basic_chatbot_node import BasicChatbotNode
-
+from src.agent.tools.search_tool import get_tools, create_tool_nodes
+from src.agent.nodes.chatbot_with_Tool_node import ChatbotWithToolNode
 
 class GraphBuilder:
     def __init__(self, model):
@@ -21,6 +22,35 @@ class GraphBuilder:
             self.graph_builder.add_node("chatbot",self.basic_chatbot_node.process)
             self.graph_builder.add_edge(START,"chatbot")
             self.graph_builder.add_edge("chatbot",END)
+            
+    def chatbot_with_tools_build_graph(self):
+        """
+        Builds an advanced chatbot graph with tool integration.
+        This method creates a chatbot graph that includes both a chatbot node 
+        and a tool node. It defines tools, initializes the chatbot with tool 
+        capabilities, and sets up conditional and direct edges between nodes. 
+        The chatbot node is set as the entry point.
+        """
+        ## Define the tool and tool node
+
+        tools=get_tools()
+        tool_node=create_tool_nodes(tools)
+
+        ##Define LLM
+        llm = self.model
+
+        # Define chatbot node
+        obj_chatbot_with_node = ChatbotWithToolNode(llm)
+        chatbot_node = obj_chatbot_with_node.create_chatbot(tools)
+
+        # Add nodes
+        self.graph_builder.add_node("chatbot", chatbot_node)
+        self.graph_builder.add_node("tools", tool_node)
+
+        # Define conditional and direct edges
+        self.graph_builder.add_edge(START,"chatbot")
+        self.graph_builder.add_conditional_edges("chatbot", tools_condition)
+        self.graph_builder.add_edge("tools","chatbot")            
 
     def setup_graph(self, usecase: str):
         """
@@ -28,5 +58,7 @@ class GraphBuilder:
         """
         if usecase == "Basic Chatbot":
             self.basic_chatbot_build_graph()
+        elif usecase == "Chatbot with Tool":
+            self.chatbot_with_tools_build_graph()            
         
         return self.graph_builder.compile()

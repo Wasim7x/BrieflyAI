@@ -7,6 +7,7 @@ streamlit
 faiss-cpu
 langchain-community
 langchain-tavily
+tavily
 
 
 

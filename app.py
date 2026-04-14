@@ -1,11 +1,12 @@
+import os
 import streamlit as st
-import json
+from src.agent.LLM.groqllm import GroqLLM
+from src.agent.graph.graph_builder import GraphBuilder
 from ui.streamlitui.loadui import LoadStreamlitUI
-from src.LLM.groqllm import GroqLLM
-from src.graph.graph_builder import GraphBuilder
 from ui.streamlitui.display_result import DisplayResultStreamlit
 
-# MAIN Function START
+print(os.getcwd())
+
 def load_langgraph_agenticai_app():
     """
     Loads and runs the LangGraph AgenticAI application with Streamlit UI.
@@ -58,9 +59,6 @@ def load_langgraph_agenticai_app():
             except Exception as e:
                  raise ValueError(f"Error Occurred with Exception : {e}")
             
-
-        
-
-   
-
-    
+if __name__ == "__main__":
+    load_langgraph_agenticai_app()            
+            

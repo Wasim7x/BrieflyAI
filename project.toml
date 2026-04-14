@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "BrieflyAI"
+version = "0.1.0"
+description = "AI-powered assistant project"
+authors = [
+    {name = "Wasim Hassan"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [pandas]
+
+[tool.setuptools]
+packages = ["src", "ui"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "ui*"]

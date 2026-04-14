@@ -6,3 +6,5 @@ langchain_openai
 streamlit
 faiss-cpu
 
+
+
